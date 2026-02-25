@@ -1,4 +1,5 @@
-using TasksManager.Domain.Common;
+using System.Collections.Generic;
+using TaskManager.Domain.Common;
 
 namespace TaskManager.Domain.Entities;
 
@@ -7,5 +8,5 @@ public class Category : BaseEntity
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; }
 
-    public ICollecion<TaskItem> Tasks { get; set; } = new List<TaskItem>();
+    public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
 }

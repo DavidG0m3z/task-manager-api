@@ -4,7 +4,7 @@ using TaskManager.Domain.Common;
 
 namespace TaskManager.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContect
+public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContect
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder)
+        base.OnModelCreating(modelBuilder);
 
         //Configuracion de Category
         modelBuilder.Entity<Category>(entity =>
@@ -33,15 +33,15 @@ public class ApplicationDbContext : DbContect
             entity.Property(e => e.Description)
                 .HasMaxLength(500);
 
-            entity.HashQueryFilter(e => !e.IsDeleted);
+            entity.HasQueryFilter(e => !e.IsDeleted);
 
         });
 
         //Configuracion de TaskItem
         modelBuilder.Entity<TaskItem>(entity =>
         {
-            entity.Totable("Tasks");
-            entity.Haskey(e => e.Id);
+            entity.ToTable("Tasks");
+            entity.HasKey(e => e.Id);
 
             entity.Property(e => e.Title)
                 .IsRequired()
@@ -54,23 +54,29 @@ public class ApplicationDbContext : DbContect
                 .HasDefaultValue(1);
 
             entity.HasOne(e => e.Category)
-                .WithMany(c => c.Task)
-                .HasForeingKey(e => e.CategoryId)
+                .WithMany(c => c.Tasks)
+                .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasQueryFilter(e => !e.IsDeleted);
 
         });
 
-        seedData(modelBuilder);
-
-        private void SeedData(ModelBuilder modelBuilder)
+        SeedData(modelBuilder);
+    }
+        
+    private void SeedData(ModelBuilder modelBuilder)
     {
+
+        var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        var futureDateShort = new DateTime(2024, 12, 15, 0, 0, 0, DateTimeKind.Utc);
+        var futureDateLong = new DateTime(2024, 12, 31, 0, 0, 0, DateTimeKind.Utc);
+
         // Categorías iniciales
         modelBuilder.Entity<Category>().HasData(
-            new Category { Id = 1, Name = "Personal", Description = "Tareas personales", CreatedAt = DateTime.UtcNow },
-            new Category { Id = 2, Name = "Trabajo", Description = "Tareas laborales", CreatedAt = DateTime.UtcNow },
-            new Category { Id = 3, Name = "Estudio", Description = "Tareas de estudio", CreatedAt = DateTime.UtcNow }
+            new Category { Id = 1, Name = "Personal", Description = "Tareas personales", CreatedAt = seedDate },
+            new Category { Id = 2, Name = "Trabajo", Description = "Tareas laborales", CreatedAt = seedDate },
+            new Category { Id = 3, Name = "Estudio", Description = "Tareas de estudio", CreatedAt = seedDate }
         );
 
         // Tareas iniciales
@@ -82,8 +88,8 @@ public class ApplicationDbContext : DbContect
                 Description = "Completar tutorial de EF Core",
                 CategoryId = 3,
                 Priority = 3,
-                DueDate = DateTime.UtcNow.AddDays(7),
-                CreatedAt = DateTime.UtcNow
+                DueDate = futureDateLong,
+                CreatedAt = seedDate
             },
             new TaskItem
             {
@@ -92,13 +98,13 @@ public class ApplicationDbContext : DbContect
                 Description = "Ir al gimnasio",
                 CategoryId = 1,
                 Priority = 2,
-                DueDate = DateTime.UtcNow.AddDays(1),
-                CreatedAt = DateTime.UtcNow
+                DueDate = futureDateLong,
+                CreatedAt = seedDate
             }
         );
     }
 
-    public override async Task<int> SaveChangeAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker.Entries<BaseEntity>();
 
@@ -111,18 +117,18 @@ public class ApplicationDbContext : DbContect
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.UpdateAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedAt = DateTime.UtcNow;
                     break;
 
                 case EntityState.Deleted:
                     // Soft Delete
                     entry.State = EntityState.Modified;
-                    entry.Entity.IdDelete = true;
-                    entry.Entity.DelateAt = DateTime.UtcNow;
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.DeletedAt = DateTime.UtcNow;
                     break;
             }
         }
 
-        return await base.SaveChangeAsync(cancellationToken);
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }
