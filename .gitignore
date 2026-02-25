@@ -1,0 +1,40 @@
+# Build
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
+
+# Environment
+.env
+
+# Coverage
+coverage/
+
+# Publish
+publish/
+
+# EF migrations snapshot
+*Migrations/*Snapshot.cs
