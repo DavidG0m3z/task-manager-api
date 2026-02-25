@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\TaskManager.Domain",
+    "\\src\\TaskManager.Domain\\Common",
+    "\\src\\TaskManager.Domain\\Entities",
+    "\\src\\TaskManager.Infrastructure",
+    "\\src\\TaskManager.Infrastructure\\Data"
+  ],
+  "SelectedNode": "\\src\\TaskManager.Infrastructure\\Data\\ApplicaitonDbContext.cs",
+  "PreviewInSolutionExplorer": false
+}
