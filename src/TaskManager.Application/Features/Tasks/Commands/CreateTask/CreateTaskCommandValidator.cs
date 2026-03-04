@@ -7,12 +7,12 @@ public class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
     public CreateTaskCommandValidator()
     {
         RuleFor(x => x.Title)
-            .NoEmpty()
-            .WhitMessage("El titulo es obligatorio")
+            .NotEmpty()
+            .WithMessage("El titulo es obligatorio")
             .MaximumLength(200)
             .WithMessage("El titulo no puede exceder 200 caractares");
 
-        RuleFor(x => x.Descriptcion)
+        RuleFor(x => x.Description)
             .MaximumLength(1000)
             .WithMessage("La descripcion no puede exceder 1000 caracteres")
             .When(x => !string.IsNullOrEmpty(x.Description));

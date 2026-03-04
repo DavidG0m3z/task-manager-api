@@ -3,9 +3,10 @@ using TaskManager.Application.Common.DTOs;
 using TaskManager.Application.Common.Models;
 using TaskManager.Domain.Interfaces;
 
+
 namespace TaskManager.Application.Features.Tasks.Queries.GetAllTasks;
 
-public class GetAllTasksQueryHandler : IResquestHandler<GetAllTasksQuery, Result<List<TaskDto>>>
+public class GetAllTasksQueryHandler : IRequestHandler<GetAllTasksQuery, Result<List<TaskDto>>>
 {
     private readonly ITaskRepository _taskReposity;
 
@@ -14,7 +15,7 @@ public class GetAllTasksQueryHandler : IResquestHandler<GetAllTasksQuery, Result
         _taskReposity = taskRepository;
     }
 
-    public async Task<Result<List<TaskDto>>> Handler(
+    public async Task<Result<List<TaskDto>>> Handle(
         GetAllTasksQuery request,
         CancellationToken cancellationToken)
     {

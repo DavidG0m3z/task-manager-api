@@ -48,4 +48,11 @@ public class TaskRepository : Repository<TaskItem>, ITaskRepository
             .Where(t => !t.IsCompleted)
             .ToListAsync();
     }
+
+    public async Task<TaskItem> SaveAsync(TaskItem task)
+    {
+        _context.Tasks.Add(task);
+        await _context.SaveChangesAsync();
+        return task;
+    }
 }

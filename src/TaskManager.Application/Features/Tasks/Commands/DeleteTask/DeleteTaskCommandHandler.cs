@@ -1,6 +1,8 @@
 using MediatR;
 using TaskManager.Application.Common.Models;
 using TaskManager.Domain.Interfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TaskManager.Application.Features.Tasks.Commands.DeleteTask;
 
@@ -13,14 +15,14 @@ public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Resul
         _taskRepository = taskRepository;
     }
 
-    public async Task<Result<bool>> Handler(
+    public async Task<Result<bool>> Handle(
         DeleteTaskCommand request,
         CancellationToken cancellationToken)
     {
         var task = await _taskRepository.GetByIdAsync(request.Id);
         if (task == null)
         {
-            return Result<bool>.Failure($"La tarea con ID {request.Id} no existe")
+            return Result<bool>.Failure($"La tarea con ID {request.Id} no existe");
         }
 
 
@@ -29,5 +31,4 @@ public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Resul
         return Result<bool>.Success(true);
 
     }
-
 }

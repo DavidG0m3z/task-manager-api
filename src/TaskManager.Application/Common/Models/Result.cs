@@ -1,6 +1,6 @@
 namespace TaskManager.Application.Common.Models;
 
-public class Reslt<T>
+public class Result<T>
 {
     public bool IsSuccess { get; private set; }
     public bool IsFailure => !IsSuccess;
@@ -9,20 +9,20 @@ public class Reslt<T>
     
 
 
-    private Reslt() { }
+    private Result() { }
 
-    public static Reslt<T> Success(T value)
+    public static Result<T> Success(T value)
     {
-        return new Reslt<T>
+        return new Result<T>
         {
             IsSuccess = true,
             Value = value
         };
     }
 
-    public static Reslt<T> Failure(string error)
+    public static Result<T> Failure(string error)
     {
-        return new Reslt<T>
+        return new Result<T>
         {
             IsSuccess = false,
             Error = error

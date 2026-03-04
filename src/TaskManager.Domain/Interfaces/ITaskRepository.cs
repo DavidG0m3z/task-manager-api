@@ -8,4 +8,6 @@ public interface ITaskRepository : IRepository<TaskItem>
     Task<List<TaskItem>> GetByCategoryIdAsync(int categoryId);
     Task<List<TaskItem>> GetCompletedTaskAsync();
     Task<List<TaskItem>> GetPendingTaskAsync();
+    //Task SaveAsync();
+    Task<TaskItem> SaveAsync(TaskItem task);
 }

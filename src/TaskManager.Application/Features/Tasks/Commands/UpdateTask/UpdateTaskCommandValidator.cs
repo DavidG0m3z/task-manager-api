@@ -11,21 +11,22 @@ public class UpdateTaskCommandValidator : AbstractValidator<UpdateTaskCommand>
             .WithMessage($"Debe especificar un Id valido");
 
         RuleFor(x => x.Title)
-            .NoEmpty()
+            .NotEmpty()
             .WithMessage($"El titulo es obligatorio")
-            .MaximunLength(200)
+            .MaximumLength(200)
             .WithMessage($"El titulo no puede exceder 200 caractares");
 
         RuleFor(x => x.Description)
-            .MaximumLength("La descripcion no puede exceder 1000 caracteres")
+            .MaximumLength(1000)
+            .WithMessage("La descripcion no puede exceder 1000 caracteres")
             .When(x => !string.IsNullOrEmpty(x.Description));
 
         RuleFor(x => x.Priority)
-            .InclusiveBetween(1,3)
-            .WithMessage($"La prioridad debe ser 1 (Baja), 2 (Media) o 3 (Alta)"):
+            .InclusiveBetween(1, 3)
+            .WithMessage($"La prioridad debe ser 1 (Baja), 2 (Media) o 3 (Alta)");
 
         RuleFor(x => x.DueDate)
-            //.GreaterThan(DateTime.UtcNow)
+            .GreaterThan(DateTime.UtcNow)
             .WithMessage("La fecha limite debe ser en el futuro")
             .When(x => x.DueDate.HasValue);
     }

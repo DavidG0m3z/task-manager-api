@@ -26,86 +26,87 @@ public class TaskController : ControllerBase
         [FromQuery] int? categoryId,
         [FromQuery] bool? isCompleted)
     {
-        var query = await new GetAllTaskQuery
+        var query = new GetAllTasksQuery
         {
             CategoryId = categoryId,
-            isCompleted = isCompleted
-        }
+            IsCompleted = isCompleted
+        };
 
         var result = await _mediator.Send(query);
 
         return Ok(result.Value);
-    };
-}
-
-///---- Obtiene una tarea por ID ---
-[HttpGet("{id}")]
-public class Task<IActionResult> GetById(int id)
-{
-    var query = new GetTaskByIdQuery { Id = id };
-    var result = await _mediator.Send(query);
-
-    if (result.IsFailure)
-    {
-        return NotFound(result.Error);
     }
 
-    return Ok(result.Value);
-}
 
-///--- Crea una nueva tarea ---
-[HttpPost]
-public class Task<IActionResult> Create(
-    [FromBody] CreateTaskCommand command )
-{
-    var result = await _meditor.Send(command);
-
-    if (result.IdFailure)
+    ///---- Obtiene una tarea por ID ---
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        return BadRequest(result.Error);
+        var query = new GetTaskByIdQuery { Id = id };
+        var result = await _mediator.Send(query);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 
-    return CreateAction(
-        nameof(GetById),
-        new { id = result.Value!.Id }
-        result.Value
-    );
-}
-
-
-///--- Actualiza una tarea existente ---
-[HttpPut("{id}")]
-public class Task<IActionResult> Update( 
-    int id,
-    [FromBody] UpdateTaskCommand command
-    )
-{
-    if (id != command.Id)
-        return BadRequest("El ID del URL no coincide con el ID del comando");
-
-    var result = await _mediator.Send(command);
-
-    if (result.IsFailure)
+    ///--- Crea una nueva tarea ---
+    [HttpPost]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateTaskCommand command)
     {
-        return NotFound(result.Error);
-    };
+        var result = await _mediator.Send(command);
 
-    return Ok(result.Valure);
-}
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
 
-
-///--- Elimina una tarea (soft delete) ---
-[HttpDelete("{id}")]
-public class Task<IActionResult> Delete( int id )
-{
-    var command = new DeleteTaskCommand { Id = id };
-    var result = await _mediator.Send(command);
-
-    if (result.IsFailure)
-    {
-        return NotFound(result.Error);
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = result.Value!.Id },
+            result.Value
+        );
     }
 
-    return NoContent();
+
+    ///--- Actualiza una tarea existente ---
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(
+        int id,
+        [FromBody] UpdateTaskCommand command
+        )
+    {
+        if (id != command.Id)
+            return BadRequest("El ID del URL no coincide con el ID del comando");
+
+        var result = await _mediator.Send(command);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+
+    ///--- Elimina una tarea (soft delete) ---
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var command = new DeleteTaskCommand { Id = id };
+        var result = await _mediator.Send(command);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return NoContent();
+    }
 }
 

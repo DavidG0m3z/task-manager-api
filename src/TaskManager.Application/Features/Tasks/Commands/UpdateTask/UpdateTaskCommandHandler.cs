@@ -7,7 +7,7 @@ namespace TaskManager.Application.Features.Tasks.Commands.UpdateTask;
 
 public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Result<TaskDto>>
 {
-    private readonly ITaskRespository _TaskRepository;
+    private readonly ITaskRepository _TaskRepository;
     private readonly ICategoryRepository _CategoryRepository;
 
     public UpdateTaskCommandHandler(
@@ -18,7 +18,7 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
         _CategoryRepository = categoryRepository;
     }
 
-    public async Task<Result<TaskDto>> Handler(
+    public async Task<Result<TaskDto>> Handle(
         UpdateTaskCommand request,
         CancellationToken cancellationToken
         )
@@ -27,13 +27,13 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
 
         if (task == null)
         {
-            return Result<TaskDto>.Failure($"La tarea con el ide {request.Id} no exciste"):
+            return Result<TaskDto>.Failure($"La tarea con el ide {request.Id} no exciste");
         }
 
         var categoryExists = await _CategoryRepository.ExistsAsync(request.CategoryId);
         if (!categoryExists)
         {
-            return Result<TaskDto>.Failure($"La categoría con ID {request.CategoryId} no existe"):
+            return Result<TaskDto>.Failure($"La categoría con ID {request.CategoryId} no existe");
         }
 
         var category = await _CategoryRepository.GetByIdAsync(request.CategoryId);

@@ -1,11 +1,14 @@
 using MediatR;
 using TaskManager.Application.Common.DTOs;
 using TaskManager.Application.Common.Models;
+using TaskManager.Application.Features.Tasks.Queries.GetTaskById;
 using TaskManager.Domain.Interfaces;
+
+
 
 namespace TaskManager.Application.Features.Tasks.Queries.GetTaskById;
 
-public class GetTaskByIdHandler : IRequestHandler<GetTaksByIdQuery, Result<TaskDto>>
+public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, Result<TaskDto>>
 {
     private readonly ITaskRepository _taskRepository;
 
@@ -14,7 +17,7 @@ public class GetTaskByIdHandler : IRequestHandler<GetTaksByIdQuery, Result<TaskD
         _taskRepository = taskRepository;
     }
 
-    public async Taks<Result<TaskDto>> handler( 
+    public async Task<Result<TaskDto>> Handle( 
         GetTaskByIdQuery request,
         CancellationToken cancellationToken)
     {
@@ -41,4 +44,4 @@ public class GetTaskByIdHandler : IRequestHandler<GetTaksByIdQuery, Result<TaskD
 
         return Result<TaskDto>.Success(taskDto);
     }
-}
+}   

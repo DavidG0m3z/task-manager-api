@@ -14,5 +14,5 @@ public class TaskItem : BaseEntity
     public int CategoryId { get; set; }
 
     //Navegacion
-     public Category Category { get; set; } = null;
+    public Category Category { get; set; } = null!;
 }

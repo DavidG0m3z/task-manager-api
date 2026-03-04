@@ -4,7 +4,7 @@ using TaskManager.Application.Common.Models;
 
 namespace TaskManager.Application.Features.Tasks.Queries.GetTaskById;
 
-public class GetByIdQuery : IRequiest<Result<TaskDto>>
+public class GetTaskByIdQuery : IRequest<Result<TaskDto>>
 {
     public int Id { get; set; }
 }
