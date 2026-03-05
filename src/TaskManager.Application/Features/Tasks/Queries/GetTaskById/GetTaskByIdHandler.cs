@@ -1,4 +1,5 @@
 using MediatR;
+using AutoMapper;
 using TaskManager.Application.Common.DTOs;
 using TaskManager.Application.Common.Models;
 using TaskManager.Application.Features.Tasks.Queries.GetTaskById;
@@ -11,10 +12,12 @@ namespace TaskManager.Application.Features.Tasks.Queries.GetTaskById;
 public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, Result<TaskDto>>
 {
     private readonly ITaskRepository _taskRepository;
+    private readonly IMapper _mapper;
 
-    public GetTaskByIdHandler(ITaskRepository taskRepository)
+    public GetTaskByIdHandler(ITaskRepository taskRepository, IMapper mapper)
     {
         _taskRepository = taskRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<TaskDto>> Handle( 

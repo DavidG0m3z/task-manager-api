@@ -1,4 +1,5 @@
 using MediatR;
+using AutoMapper;
 using TaskManager.Application.Common.DTOs;
 using TaskManager.Application.Common.Models;
 using TaskManager.Domain.Interfaces;
@@ -9,10 +10,12 @@ namespace TaskManager.Application.Features.Tasks.Queries.GetAllTasks;
 public class GetAllTasksQueryHandler : IRequestHandler<GetAllTasksQuery, Result<List<TaskDto>>>
 {
     private readonly ITaskRepository _taskReposity;
+    private readonly IMapper _mapper;
 
-    public GetAllTasksQueryHandler(ITaskRepository taskRepository)
+    public GetAllTasksQueryHandler(ITaskRepository taskRepository, IMapper mapper)
     {
         _taskReposity = taskRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<List<TaskDto>>> Handle(
@@ -35,18 +38,20 @@ public class GetAllTasksQueryHandler : IRequestHandler<GetAllTasksQuery, Result<
                 .ToList();
         }
 
-        var taskDtos = tasks.Select(task => new TaskDto
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            IsCompleted = task.IsCompleted,
-            DueDate = task.DueDate,
-            Priority = task.Priority,
-            CategoryId = task.CategoryId,
-            CategoryName = task.Category?.Name ?? "Sin categoría",
-            CreatedAt = task.CreatedAt
-        }).ToList();
+        var taskDto = _mapper.Map<TaskDto>(tasks);
+
+        //var taskDtos = tasks.Select(task => new TaskDto
+        //{
+        //    Id = task.Id,
+        //    Title = task.Title,
+        //    Description = task.Description,
+        //    IsCompleted = task.IsCompleted,
+        //    DueDate = task.DueDate,
+        //    Priority = task.Priority,
+        //    CategoryId = task.CategoryId,
+        //    CategoryName = task.Category?.Name ?? "Sin categoría",
+        //    CreatedAt = task.CreatedAt
+        //}).ToList();
 
         return Result<List<TaskDto>>.Success(taskDtos);
 

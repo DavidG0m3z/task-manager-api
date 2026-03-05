@@ -1,4 +1,5 @@
 using MediatR;
+using AutoMapper; 
 using TaskManager.Application.Common.DTOs;
 using TaskManager.Application.Common.Models;
 using TaskManager.Domain.Interfaces;
@@ -9,13 +10,16 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
 {
     private readonly ITaskRepository _TaskRepository;
     private readonly ICategoryRepository _CategoryRepository;
+    private readonly IMapper _mapper;
 
     public UpdateTaskCommandHandler(
         ITaskRepository taskRepository,
-        ICategoryRepository categoryRepository)
+        ICategoryRepository categoryRepository,
+        IMapper mapper)
     {
         _TaskRepository = taskRepository;
         _CategoryRepository = categoryRepository;
+        _Mapper = mapper;
     }
 
     public async Task<Result<TaskDto>> Handle(
@@ -47,18 +51,20 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
 
         await _TaskRepository.UpdateAsync(task);
 
-        var taskDto = new TaskDto
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            IsCompleted = task.IsCompleted,
-            DueDate = task.DueDate,
-            Priority = task.Priority,
-            CategoryId = task.CategoryId,
-            CategoryName = category!.Name,
-            CreatedAt = task.CreatedAt
-        };
+        var taskDto = _mapper.Map<TaskDto>(task);
+
+        //var taskDto = new TaskDto
+        //{
+        //    Id = task.Id,
+        //    Title = task.Title,
+        //    Description = task.Description,
+        //    IsCompleted = task.IsCompleted,
+        //    DueDate = task.DueDate,
+        //    Priority = task.Priority,
+        //    CategoryId = task.CategoryId,
+        //    CategoryName = category!.Name,
+        //    CreatedAt = task.CreatedAt
+        //};
 
         return Result<TaskDto>.Success(taskDto);
 
