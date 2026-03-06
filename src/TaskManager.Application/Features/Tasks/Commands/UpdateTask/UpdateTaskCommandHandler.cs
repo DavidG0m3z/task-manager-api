@@ -19,7 +19,7 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
     {
         _TaskRepository = taskRepository;
         _CategoryRepository = categoryRepository;
-        _Mapper = mapper;
+        _mapper = mapper;
     }
 
     public async Task<Result<TaskDto>> Handle(

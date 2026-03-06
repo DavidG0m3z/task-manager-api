@@ -38,7 +38,7 @@ public class GetAllTasksQueryHandler : IRequestHandler<GetAllTasksQuery, Result<
                 .ToList();
         }
 
-        var taskDto = _mapper.Map<TaskDto>(tasks);
+        var taskDto = _mapper.Map<List<TaskDto>>(tasks);
 
         //var taskDtos = tasks.Select(task => new TaskDto
         //{
@@ -53,7 +53,7 @@ public class GetAllTasksQueryHandler : IRequestHandler<GetAllTasksQuery, Result<
         //    CreatedAt = task.CreatedAt
         //}).ToList();
 
-        return Result<List<TaskDto>>.Success(taskDtos);
+        return Result<List<TaskDto>>.Success(taskDto);
 
     }
 

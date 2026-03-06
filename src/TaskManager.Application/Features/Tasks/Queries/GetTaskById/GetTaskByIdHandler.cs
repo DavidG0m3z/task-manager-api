@@ -31,19 +31,20 @@ public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, Result<TaskD
             return Result<TaskDto>.Failure($"La tarea con id {request.Id} no fue enconntrada");
         }
 
+        var taskDto = _mapper.Map<TaskDto>(task);
 
-        var taskDto = new TaskDto
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            IsCompleted = task.IsCompleted,
-            DueDate = task.DueDate,
-            Priority = task.Priority,
-            CategoryId = task.CategoryId,
-            CategoryName = task.Category?.Name ?? "Sin categoría",
-            CreatedAt = task.CreatedAt
-        };
+        //var taskDto = new TaskDto
+        //{
+        //    Id = task.Id,
+        //    Title = task.Title,
+        //    Description = task.Description,
+        //    IsCompleted = task.IsCompleted,
+        //    DueDate = task.DueDate,
+        //    Priority = task.Priority,
+        //    CategoryId = task.CategoryId,
+        //    CategoryName = task.Category?.Name ?? "Sin categoría",
+        //    CreatedAt = task.CreatedAt
+        //};
 
         return Result<TaskDto>.Success(taskDto);
     }
