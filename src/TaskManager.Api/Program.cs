@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TaskManager.Api.Middleware;
 using TaskManager.Application;  
 using TaskManager.Domain.Interfaces;
 using TaskManager.Infrastructure.Data;
@@ -25,6 +26,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddApplication();
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionalHandlerMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
