@@ -6,7 +6,7 @@ using TaskManager.Domain.Entities;
 
 namespace TaskManager.Domain.Interfaces
 {
-    public interface IUserReposiory : IRepository<User>
+    public interface IUserRepository : IRepository<User>
     {
         Task<User?> GetByEmailAsync(string email);
         Task<bool> EmailExistAsync(string email);

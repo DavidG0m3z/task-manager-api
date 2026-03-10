@@ -2,45 +2,46 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TaskManager.Application.Common.DTOs.Auth;
 using TaskManager.Application.Common.Models;
 using TaskManager.Domain.Interfaces;
 
-namespace TaskManager.Application.Common.DTOs.Auth.Commands.Login
+namespace TaskManager.Application.Features.Auth.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResponse>>
+    internal class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResponse>>
     {
-        private readonly IUserRepository _userReposiory;
+        private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
 
-        public LoginCommandHandler(
-            IUserRepository userReposiory, IJwtService jwtService)
+        public LoginCommandHandler( 
+            IUserRepository userRepository, 
+            IJwtService jwtService )
         {
-            _userReposiory = userReposiory;
+            _userRepository = userRepository;
             _jwtService = jwtService;
         }
-
 
         public async Task<Result<AuthResponse>> Handle(
             LoginCommand request,
             CancellationToken cancellationToken)
         {
-            var user = await _userReposiory.GetByEmailAsync(request.Email);
+            var user = await _userRepository.GetByEmailAsync( request.Email );
 
-            if (user == null)
+            if ( user == null )
             {
                 return Result<AuthResponse>.Failure("Credenciales invalidas");
             }
 
-            if (!user.IsActive)
+            if ( !user.IsActive)
             {
                 return Result<AuthResponse>.Failure("Usuario inactivo");
             }
 
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
 
-            if (!isPasswordValid)
+            if ( !isPasswordValid )
             {
-                return Result<AuthResponse>.Failure("Credenciales Invalidas");
+                return Result<AuthResponse>.Failure("Password invalido");
             }
 
             var token = _jwtService.GenerateToken(user);
@@ -56,7 +57,7 @@ namespace TaskManager.Application.Common.DTOs.Auth.Commands.Login
 
             return Result<AuthResponse>.Success(response);
 
-
         }
-    }       
+
+    }
 }

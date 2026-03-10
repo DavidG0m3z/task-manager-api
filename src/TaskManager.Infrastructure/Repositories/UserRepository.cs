@@ -8,7 +8,7 @@ using TaskManager.Infrastructure.Data;
 
 namespace TaskManager.Infrastructure.Repositories;
 
-public class UserRepository : Repository<User>, IUserReposiory
+public class UserRepository : Repository<User>, IUserRepository
 {
     public UserRepository(ApplicationDbContext context) : base(context)
     { 
@@ -21,7 +21,7 @@ public class UserRepository : Repository<User>, IUserReposiory
             .FirstOrDefaultAsync(u => u.Email.ToLower()  == email.ToLower());
     }
 
-    public async Task<bool> EmailExistsAsync(string email)
+    public async Task<bool> EmailExistAsync(string email)
     {
         return await _dbSet
             .AnyAsync(u => u.Email.ToLower() == email.ToLower());

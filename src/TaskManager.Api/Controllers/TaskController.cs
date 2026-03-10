@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using TaskManager.Application.Features.Tasks.Commands.CreateTask;
 using TaskManager.Application.Features.Tasks.Commands.UpdateTask;
 using TaskManager.Application.Features.Tasks.Commands.DeleteTask;
@@ -10,6 +11,7 @@ namespace TaskManager.Api.Controllers;
 
 [ApiController]
 [Route("api/[Controller]")]
+[Authorize]
 public class TaskController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -96,6 +98,7 @@ public class TaskController : ControllerBase
 
     ///--- Elimina una tarea (soft delete) ---
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var command = new DeleteTaskCommand { Id = id };
