@@ -21,9 +21,10 @@ public class UserRepository : Repository<User>, IUserRepository
             .FirstOrDefaultAsync(u => u.Email.ToLower()  == email.ToLower());
     }
 
-    public async Task<bool> EmailExistAsync(string email)
+    public async Task<bool> EmailExistsAsync(string email)
     {
         return await _dbSet
+            .IgnoreQueryFilters()
             .AnyAsync(u => u.Email.ToLower() == email.ToLower());
     }
 

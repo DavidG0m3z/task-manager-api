@@ -26,7 +26,7 @@ namespace TaskManager.Application.Features.Auth.Commands.Registrer
             RegisterCommand request, 
             CancellationToken cancellationToken )
         {
-            bool emailExist = await _userRepository.EmailExistAsync(request.Email);
+            bool emailExist = await _userRepository.EmailExistsAsync(request.Email);
             
             if (!emailExist)
             {
