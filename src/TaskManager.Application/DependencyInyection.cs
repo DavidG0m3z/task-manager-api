@@ -2,7 +2,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace TaskManager.Application;
