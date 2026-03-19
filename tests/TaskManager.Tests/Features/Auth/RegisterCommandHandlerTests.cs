@@ -133,9 +133,9 @@ namespace TaskManager.Tests.Features.Auth
             // ASSERT (Verificar)
 
             result.IsFailure.Should().BeTrue();
-            result.IsSuccess.Should().BeTrue();
+            result.IsSuccess.Should().BeFalse();
 
-            result.Error.Should().Be("El email ya esta registrado");
+            result.Error.Should().Be("El email ya está registrado");
 
             _userRepositoryMock.Verify(
                 x => x.EmailExistsAsync(command.Email),

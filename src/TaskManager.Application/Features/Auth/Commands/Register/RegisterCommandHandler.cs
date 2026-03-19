@@ -28,7 +28,7 @@ namespace TaskManager.Application.Features.Auth.Commands.Registrer
         {
             bool emailExist = await _userRepository.EmailExistsAsync(request.Email);
             
-            if (!emailExist)
+            if (emailExist)
             {
                 return Result<AuthResponse>.Failure("El email ya está registrado");
             }
