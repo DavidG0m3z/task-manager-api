@@ -8,7 +8,7 @@ using TaskManager.Domain.Interfaces;
 
 namespace TaskManager.Application.Features.Auth.Commands.Login
 {
-    internal class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResponse>>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResponse>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
