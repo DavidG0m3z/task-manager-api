@@ -41,18 +41,16 @@ public class DeleteTaskCommandHandlerTests
 
         _taskRepositoryMock
             .Setup(x => x.DeleteAsync(existingTask))
-            .Returns((Task<TaskItem>)Task.CompletedTask);
+            .ReturnsAsync(existingTask);
 
         //Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
         //Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Contain("tarea");
-        result.Error.Should().Contain(command.Id.ToString());
+        result.IsSuccess.Should().BeTrue();
 
         _taskRepositoryMock.Verify(x => x.GetByIdAsync(command.Id), Times.Once);
-        _taskRepositoryMock.Verify(x => x.DeleteAsync(It.IsAny<TaskItem>()), Times.Never);
+        _taskRepositoryMock.Verify(x => x.DeleteAsync(It.IsAny<TaskItem>()), Times.Once);
     }
 
     [Fact]
@@ -80,33 +78,24 @@ public class DeleteTaskCommandHandlerTests
         _taskRepositoryMock.Verify(x => x.DeleteAsync(existingTask), Times.Once);
     }
 
+    [Fact]
+    public async Task Handle_WithNonExistingTask_ShouldReturnFailure()
+    {
+        // Arrange
+        var command = new DeleteTaskCommand { Id = 1 };
 
+        _taskRepositoryMock
+            .Setup(x => x.GetByIdAsync(command.Id))
+            .ReturnsAsync((TaskItem?)null);
 
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
 
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Contain("tarea");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        _taskRepositoryMock.Verify(x => x.DeleteAsync(It.IsAny<TaskItem>()), Times.Never);
+    }
 }
 

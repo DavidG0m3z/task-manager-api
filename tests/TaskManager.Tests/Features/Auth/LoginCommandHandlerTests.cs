@@ -17,7 +17,7 @@ namespace TaskManager.Tests.Features.Auth
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IJwtService> _jwtServiceMock;
         private readonly LoginCommandHandler _handler;
-        public loginCommandHandlerTests()
+        public LoginCommandHandlerTests()
         {
 
             _userRepositoryMock = new Mock<IUserRepository>();
@@ -91,7 +91,7 @@ namespace TaskManager.Tests.Features.Auth
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be("Credenciales inválidas");
+            result.Error.Should().Be("Credenciales invalidas");
 
             _userRepositoryMock.Verify(x => x.GetByEmailAsync(command.Email), Times.Once);
             _jwtServiceMock.Verify(x => x.GenerateToken(It.IsAny<User>()), Times.Never);
@@ -129,7 +129,7 @@ namespace TaskManager.Tests.Features.Auth
 
             //Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be("Credenciales inválidas");
+            result.Error.Should().Be("Password invalido");
 
             _userRepositoryMock.Verify(x => x.GetByEmailAsync(command.Email), Times.Once);
             _jwtServiceMock.Verify(x => x.GenerateToken(It.IsAny<User>()), Times.Never);
@@ -166,7 +166,7 @@ namespace TaskManager.Tests.Features.Auth
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be("Usuario desactivado");
+            result.Error.Should().Be("Usuario inactivo");
 
             _userRepositoryMock.Verify(x => x.GetByEmailAsync(command.Email), Times.Once);
             _jwtServiceMock.Verify(x => x.GenerateToken(It.IsAny<User>()), Times.Never);

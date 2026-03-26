@@ -37,6 +37,11 @@ namespace TaskManager.Application.Features.Auth.Commands.Login
                 return Result<AuthResponse>.Failure("Usuario inactivo");
             }
 
+            if ( string.IsNullOrEmpty(request.Password) )
+            {
+                return Result<AuthResponse>.Failure("Credenciales invalidas");
+            }
+
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
 
             if ( !isPasswordValid )

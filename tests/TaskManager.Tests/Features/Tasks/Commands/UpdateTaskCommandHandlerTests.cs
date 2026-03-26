@@ -63,7 +63,7 @@ public class UpdateTaskCommandHandlerTests
 
         _taskRepositoryMock
             .Setup(x => x.UpdateAsync(It.IsAny<TaskItem>()))
-            .Returns((Task<TaskItem>)Task.CompletedTask);
+            .ReturnsAsync(existingTask);
 
         var taskDto = new Application.Common.DTOs.TaskDto
         {

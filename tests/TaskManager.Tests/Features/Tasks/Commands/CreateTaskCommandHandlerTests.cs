@@ -56,7 +56,7 @@ public class CreateTaskCommandHandlerTests
         };
 
         _taskRepositoryMock
-            .Setup(x => x.AddAsync(It.IsAny<TaskItem>()))
+            .Setup(x => x.SaveAsync(It.IsAny<TaskItem>()))
             .ReturnsAsync(savedTask);
 
         var taskDto = new Application.Common.DTOs.TaskDto
@@ -84,7 +84,7 @@ public class CreateTaskCommandHandlerTests
         result.Value.Priority.Should().Be(command.Priority);
 
         _categoryRepositoryMock.Verify(x => x.ExistsAsync(command.CategoryId), Times.Once);
-        _taskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<TaskItem>()), Times.Once);
+        _taskRepositoryMock.Verify(x => x.SaveAsync(It.IsAny<TaskItem>()), Times.Once);
     }
 
     [Fact]
@@ -109,11 +109,11 @@ public class CreateTaskCommandHandlerTests
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Should().Contain("categoría");
+        result.Error.Should().Contain("categoria");
         result.Error.Should().Contain(command.CategoryId.ToString());
 
         _categoryRepositoryMock.Verify(x => x.ExistsAsync(command.CategoryId), Times.Once);
-        _taskRepositoryMock.Verify(x => x.AddAsync(It.IsAny<TaskItem>()), Times.Never);
+        _taskRepositoryMock.Verify(x => x.SaveAsync(It.IsAny<TaskItem>()), Times.Never);
     }
 
     [Theory]
@@ -154,13 +154,17 @@ public class CreateTaskCommandHandlerTests
 
         TaskItem? capturedTask = null;
         _taskRepositoryMock
-            .Setup(x => x.AddAsync(It.IsAny<TaskItem>()))
+            .Setup(x => x.SaveAsync(It.IsAny<TaskItem>()))
             .Callback<TaskItem>(task => capturedTask = task)
             .ReturnsAsync((TaskItem task) => task);
 
         _mapperMock
             .Setup(x => x.Map<Application.Common.DTOs.TaskDto>(It.IsAny<TaskItem>()))
-            .Returns(new Application.Common.DTOs.TaskDto());
+            .Returns(new Application.Common.DTOs.TaskDto 
+            { 
+                //Id = 1,
+                Description = "Description", 
+            });
 
         // Act
         await _handler.Handle(command, CancellationToken.None);
