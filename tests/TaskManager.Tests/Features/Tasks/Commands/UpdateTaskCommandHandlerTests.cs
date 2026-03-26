@@ -63,7 +63,7 @@ public class UpdateTaskCommandHandlerTests
 
         _taskRepositoryMock
             .Setup(x => x.UpdateAsync(It.IsAny<TaskItem>()))
-            .Returns(Task.CompletedTask);
+            .Returns((Task<TaskItem>)Task.CompletedTask);
 
         var taskDto = new Application.Common.DTOs.TaskDto
         {
@@ -85,6 +85,7 @@ public class UpdateTaskCommandHandlerTests
         {
             Id = 999,
             Title = "Tarea",
+            Description = "Nueva descripción",
             CategoryId = 1,
             Priority = 2,
             DueDate = DateTime.UtcNow
@@ -114,6 +115,7 @@ public class UpdateTaskCommandHandlerTests
         {
             Id = 1,
             Title = "Tarea",
+            Description = "Nueva descripción",
             CategoryId = 999,
             Priority = 2,
             DueDate = DateTime.UtcNow
